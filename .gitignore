@@ -2,6 +2,8 @@
 build/
 DerivedData/
 Intermediates/
+DerivedData/*
+Intermediates/*
 
 ## Various settings
 *.pbxuser
@@ -14,6 +16,7 @@ Intermediates/
 !default.perspectivev3
 xcuserdata/
 *.xactivitylog
+*.modulevalidation
 
 ## Other
 *.moved-aside
@@ -27,6 +30,8 @@ db/schema.rb
 Cache.db
 tmp/**/*
 *.db
+*.plist
+
 
 # Compiled Object files
 *.slo
