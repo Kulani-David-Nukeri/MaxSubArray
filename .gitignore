@@ -4,6 +4,8 @@ DerivedData/
 Intermediates/
 DerivedData/*
 Intermediates/*
+MaxSubArray.xcodeproj
+MaxSubArray.xcodeproj/*
 
 ## Various settings
 *.pbxuser
