@@ -31,7 +31,7 @@ int brute_force(const int* a, const int len){       // Provide pointer to array,
 }
 
 int divide_and_conquer(const int* a, const int len){
-    int max =0, max_local = 0;
+	int max =0; //, max_local = 0;
     for (int i = 0; i < len; i++){};
     return max;
 }
@@ -61,11 +61,9 @@ int main(int argc, char* argv[]){
     }
 
     // initialize random seed:
-    srand (time(NULL));
+    srand (static_cast<unsigned int>(time(NULL)));
 
-    // generate the increasing lengths of arrays with random numbers 
-    /*
-
+    // generate the increasing lengths of arrays with random numbers
     int** num_array;
     num_array = new int*[max_num];
     for (int i = 0; i < max_num; i++){
@@ -76,14 +74,19 @@ int main(int argc, char* argv[]){
     }
 
     // check
-    
+
+	cout << "Input Size " << "\t" << "Brute Force " << "\t" << "Divide and Conquer " << "\t" << "Kadane's Algorithm " << endl;
     for (int i = 0; i < max_num; i++){
-        cout << "Array " << i <<": { " ;
+			// cout << "Array " << i <<": { " ;
         for (int j = 0; j < (i+1) ; j++){
-            cout << num_array[i][j] << " ";
+            // cout << num_array[i][j] << " ";
         }
-        cout << "}" << endl;
-        //cout << "Brute Force: " << brute_force(num_array[i],i+1) << endl; 
+			// cout << "}" << endl;
+		cout << i+1 << "\t\t\t";
+        cout << brute_force(num_array[i],i+1) << "\t\t\t";
+		cout << divide_and_conquer(num_array[i],i+1) << "\t\t\t\t";
+		cout << kadane(num_array[i],i+1) << endl;
+
     }
 
      //cleanup
@@ -91,17 +94,6 @@ int main(int argc, char* argv[]){
         delete[] num_array[i];
     }
     delete num_array;
-
-    */
-
-    int a[6] = {-10, 1, 2, -2, 3, 2};
-    cout << "{ ";
-     for (int i = 0; i < 6 ; i++){
-        cout << a[i] << " ";
-        }
-        cout << "}" << endl;
-
-    cout << "Brute Force: " << brute_force(a,6) << endl;       
 
        return 0;
 
