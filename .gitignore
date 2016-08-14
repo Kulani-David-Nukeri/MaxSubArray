@@ -5,6 +5,7 @@ Intermediates/
 DerivedData/*
 Intermediates/*
 MaxSubArray.xcodeproj
+MaxSubArray.xcodeproj/
 MaxSubArray.xcodeproj/*
 
 ## Various settings
