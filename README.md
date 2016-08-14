@@ -13,7 +13,8 @@ There are two important submissions for this assignment: a code submission, wher
 • Each array should contain randomly generated values in the range -50 to 50. (use std::rand())
 • a graphical comparison between the algorithms
 Your written document should not be more than 1 page and bonus marks will be given for students who use L TEX. One document should be submitted per group. Your program output should look something like this:
-  
+
+"
 Input Size  Brute Force     Divide and Conquer  Kadane’s Algorithm
 101         2               1                   1
 201         14              9                   2
@@ -42,6 +43,7 @@ Input Size  Brute Force     Divide and Conquer  Kadane’s Algorithm
 34101       1.51964e+06     3231                102
 34201       1.49281e+06     2928                81
 34301       1.50697e+06     3035                90
+"
 
 When you plot the log-log graph using gnuplot. Your graphs should be very spiky, account for this ’spikiness’ in your written document. You can smooth-out your graphs by calculating the average of every n consecutive values (the sliding window) in your time-series data. This is known as the moving average or rolling mean. Calculate the moving average for each algorithm’s time-series and plot the new ’average’ time-series data. Your graphs should be much smoother now, account for your choice of window size in your written document.
 
@@ -63,3 +65,23 @@ https://en.wikipedia.org/wiki/Moving_average
 
 7. Getting Gnuplot on Xubuntu
 https://en.wikipedia.org/wiki/Moving_average
+
+DOCUMENTATION:
+
+Doxygen code documentation and dependency diagrams can be found by through doc/html/index.html (this page)
+
+USAGE:
+
+./main [number and max length of input arrays]
+
+Running the main executable (intended to be compiled with the executable name main) with a required input value ( the number, and maximum length of the input arrays or random integers).
+
+LICENCE:
+
+This software project was developed as part of an undergraduate degree course at the University of the Witswatersand. It makes use of standard C++ libraries and was developed using Apple's XCode 7.3,the Clang/g++ compiler, along with macVIM and other open-source software. Where applicable, the code contained in the project that is not already subject to academic and copyright restrictions of the applicable copyright holder is intended to be distributed under the MIT License (MIT): Copyright © 2016 Tyson Cross and University of the Witwatersrand
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
