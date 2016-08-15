@@ -4,9 +4,6 @@ DerivedData/
 Intermediates/
 DerivedData/*
 Intermediates/*
-MaxSubArray.xcodeproj
-MaxSubArray.xcodeproj/
-MaxSubArray.xcodeproj/*
 
 ## Various settings
 *.pbxuser
@@ -20,6 +17,7 @@ MaxSubArray.xcodeproj/*
 xcuserdata/
 *.xactivitylog
 *.modulevalidation
+output.txt
 
 ## Other
 *.moved-aside

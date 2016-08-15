@@ -171,7 +171,7 @@ int main(int argc, char* argv[]){
 
     /* Output titles */
 	int width = 20;
-	outputFile << setw(width) << left << "Input Size";
+	outputFile << setw(width) << left << "#Input Size";
 	outputFile << setw(width) << left << "Brute Force";
 	outputFile << setw(width) << left << "Divide and Conquer";
 	outputFile << setw(width) << left << "Kadane's Algorithm";
