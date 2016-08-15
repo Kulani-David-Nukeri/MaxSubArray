@@ -44,33 +44,35 @@ int brute(const int* a, const int length){						// Provide pointer to array, len
 			if (max_local > maximum) maximum = max_local;		// compare current max to total maximum.
 		}
 	}
+	if (maximum<0) maximum = 0;
 	return maximum;
 }
 
 int divide(const int* a, const int start, const int end){
 	if (start > end ) return 0;
-	if (start==end) return a[start];
-	int middle = (start + end)/2;
+	if (start==end) return max(0,a[start]);
+
+	int middle = (start + end) / 2;
 
 	/* Find the max on the left */
-	int sum = a[start];
-	int max_left = a[start];
-	for (int i = middle; i >= 1; --i){
+	int sum = 0;
+	int max_left = 0;
+	for (int i = middle; i >= start; i--){
 		sum += a[i];
 		if (max_left < sum) max_left = sum;
 	}
 
 	/* Find the max on the right */
-	sum = a[middle + 1];
+	sum = 0;
 	int max_right = a[middle + 1];
-	for (int i = middle + 1; i < end; i++){
+	for (int i = middle + 1; i <= end; i++){
 		sum += a[i];
 		if (max_right < sum) max_right = sum;
 	}
 	int max_intersection = max_left + max_right;
 
 	/* Recursion to continue to split up */
-	int max_A = divide(a, start, end);
+	int max_A = divide(a, start, middle);
 	int max_B = divide(a, (middle+1), end);
 
 	return max_three(max_intersection, max_A, max_B);
@@ -90,7 +92,8 @@ int divide(const int* a, const int length){
 }
 */
 
-
+/*
+ // If the zeroth element is not allowed
 int kadane(const int* a, const int len){
 	int maximum = a[0], max_local = a[0];
 	for (int i = 1; i < len; i++){
@@ -100,9 +103,8 @@ int kadane(const int* a, const int len){
 	}
 	return maximum;
 }
+*/
 
-/*
- // If the zeroth element is allowed, then 0 is always the minimum subarray sum}
  int kadane(const int* a, const int len){
 	int maximum = 0, max_local = 0;
 	for (int i = 0; i < len; i++){
@@ -112,7 +114,6 @@ int kadane(const int* a, const int len){
 	}
 	return maximum;
 }
-*/
 
 /** ================================================================================================================== */
 
@@ -168,51 +169,7 @@ int main(int argc, char* argv[]){
         }
     }
 
-	for (int i = 0; i < max_num; i+=steps){
-
-		int length = i;
-
-		auto time_brute_start = chrono::high_resolution_clock::now();
-		sum_brute = brute(num_array[i],length);
-		auto time_brute_end = chrono::high_resolution_clock::now();
-		auto time_brute = chrono::duration_cast<chrono::microseconds>(time_brute_end - time_brute_start); // INT version
-		//auto time_brute = chrono::duration<double>(time_brute_end - time_brute_start); // FLOAT version
-
-		auto time_divide_start = chrono::high_resolution_clock::now();
-		sum_divide = divide(num_array[i],0,length);
-		auto time_divide_end = chrono::high_resolution_clock::now();
-		auto time_divide = chrono::duration_cast<chrono::microseconds>(time_divide_end - time_divide_start); // INT version
-		//auto time_divide = chrono::duration<double>(time_divide_end - time_divide_start); // FLOAT version
-
-		auto time_kadane_start = chrono::high_resolution_clock::now();
-		sum_kadane = kadane(num_array[i],length);
-		auto time_kadane_end = chrono::high_resolution_clock::now();
-		auto time_kadane = chrono::duration_cast<chrono::microseconds>(time_kadane_end - time_kadane_start); // INT version
-		//auto time_kadane = chrono::duration<double>(time_kadane_end - time_kadane_start); // FLOAT version
-
-		/*
-		 // TEMP TO CHECK ALGORITHM //
-		 outputFile << setw(1) << "{ ";
-		 for (int j = 0; j < (i+1) ; j++){
-			outputFile << num_array[i][j] << " ";
-		 }
-
-		 outputFile << "}" << endl;
-
-		 if ((sum_brute==sum_divide)&&(sum_brute==sum_kadane)&&(sum_divide==sum_kadane)){
-			outputFile << setw(width) << left << "✓";		// matches
-		 } else{
-			outputFile << setw(width) << left << "!";		// incorrect calculation
-		 }
-
-		 outputFile << setw(width) << left << sum_brute;
-		 outputFile << setw(width) << left << sum_divide;
-		 outputFile << setw(width) << left << sum_kadane;
-		 outputFile << endl;
-		 // End TEMP //
-		 */
-
-    /* Output */
+    /* Output titles */
 	int width = 20;
 	outputFile << setw(width) << left << "Input Size";
 	outputFile << setw(width) << left << "Brute Force";
@@ -265,7 +222,7 @@ int main(int argc, char* argv[]){
 		// End TEMP //
 		*/
 
-		/* Output */
+		/* Output Time */
 		outputFile << setw(width) << left << length;
 		outputFile << setw(width) << left << fixed << time_brute.count();
 		outputFile << setw(width) << left << fixed << time_divide.count();
