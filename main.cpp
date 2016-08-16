@@ -224,9 +224,9 @@ int main(int argc, char* argv[]){
 
 		/* Output Time */
 		outputFile << setw(width) << left << length;
-		outputFile << setw(width) << left << fixed << time_brute.count();
-		outputFile << setw(width) << left << fixed << time_divide.count();
-		outputFile << setw(width) << left << fixed << time_kadane.count();
+		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_brute.count();
+		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_divide.count();
+		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_kadane.count();
 		outputFile << endl;
 
 	}

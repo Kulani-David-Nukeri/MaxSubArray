@@ -11,9 +11,9 @@ set terminal qt size 800,600  enhanced font 'Verdana,12' persist
 #set output 'plot.png'
 
 # svg
-set terminal svg size 980,720  fname 'Verdana, Helvetica, Arial, sans-serif' \
-fsize '12' rounded dashed
-set output 'plot.svg'
+#set terminal svg size 980,720  fname 'Verdana, Helvetica, Arial, sans-serif' \
+#fsize '12' rounded dashed
+#set output 'plot.svg'
 
 # color definitions
 set border linewidth 1.5
