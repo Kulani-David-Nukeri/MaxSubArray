@@ -1,9 +1,9 @@
 /**
  * @file main.cpp
  * @Synopsis Generates arrays containing random values, and records execution time for maximum subarray sum with three algorithms
- * @author Tyson Cross
- * @version 0.2
- * @date 2016-08-15
+ * @author Tyson Cross / Group D
+ * @version 0.3
+ * @date 2016-08-17
  */
 
 #include <iostream>
@@ -16,7 +16,6 @@
 #include <chrono>
 
 using namespace std;
-
 
 ///////////////////////////
 //		Functions
@@ -52,15 +51,14 @@ int brute(const int* a, const int length){						// Provide pointer to array, len
 
 // Divide and conquer: Recursive algorthm to split, compare left/right/overlap
 int divide(const int* a, const int start, const int end){
-	if (start > end ) return 0;
-	if (start==end) return max(0,a[start]);
-
-	int middle = (start + end) / 2;
+	if (start > end ) return 0;									// index error check
+	if (start==end) return max(0,a[start]);						// if there is one element, return it (or the zeroth element)
+	int middle = (start + end) / 2;								// find midpoint
 
 	/* Find the max on the left */
 	int sum = 0;
 	int max_left = 0;
-	for (int i = middle; i >= start; i--){
+	for (int i = middle; i >= start; i--){						// start... <--[midpoint]
 		sum += a[i];
 		if (max_left < sum) max_left = sum;
 	}
@@ -68,53 +66,42 @@ int divide(const int* a, const int start, const int end){
 	/* Find the max on the right */
 	sum = 0;
 	int max_right = 0;
-	for (int i = (middle + 1); i <= end; i++){
+	for (int i = (middle + 1); i <= end; i++){					// [midpoint.--> .... end
 		sum += a[i];
 		if (max_right < sum) max_right = sum;
 	}
-	int max_intersection = max_left + max_right;
+	int max_intersection = max_left + max_right;				// if both sides are positive, then the whole subarray = current max
 
 	/* Recursion to continue to split up */
-	int max_A = divide(a, start, middle);
-	int max_B = divide(a, (middle+1), end);
+	int max_A = divide(a, start, middle);						// continue to sub divide recursively
+	int max_B = divide(a, (middle+1), end);						//
 
-	/*
-	//check:
-	cout << "-----------------------------------"<< endl;
-	cout << "Start = " << start << ", middle = " << middle << ", end = " << end << endl;
-	cout << "Max_right: " << max_right << " (" << end-middle+1 << ")" << endl;
-	cout << "Max_left: " << max_left << " (" << middle-start << ")" << endl;
-	cout << "Max_intersection: " << max_intersection << endl;
-	cout << "Max_A: " << max_A << endl;
-	cout << "Max_B: " << max_B << endl ;
-	 */
-
-	return max(max(max_intersection, max_A), max_B);
+	return max(max(max_intersection, max_A), max_B);			// final return of max value
 }
 
 // Elegant linear time algorithm by Jay Kadane (1984)
  int kadane(const int* a, const int len){
-	int maximum = 0, max_local = 0;
-	for (int i = 0; i < len; i++){
-		max_local += a[i];
-		if (max_local < 0) max_local = 0;
-		if (maximum < max_local) maximum = max_local;
+	int maximum = 0, max_local = 0;								// the maximum, and the running total so far
+	for (int i = 0; i < len; i++){								// single traversal of the elements
+		max_local += a[i];										// sum the elements so far from the current subarray
+		if (max_local < 0) max_local = 0;						// check if the sum is negative - zeroth element
+		if (maximum < max_local) maximum = max_local;			// check if the current sub-array or the maximum is larger
 	}
 	return maximum;
 }
 
-/** ================================================================================================================== */
+/** ======================================================================================= **/
 
 ////////////////////////////
 //		Main
 ////////////////////////////
 
 int main(int argc, char* argv[]){
-	/* Profiling */ clock_t startTime = clock();
+	/* Profiling */ clock_t startTime = clock();				// overall system time elapsed, not very precise
 	int sum_brute = 0, sum_divide = 0 , sum_kadane = 0;
 	int max_num;
-	int start = 1;
-	int steps = 1;
+	int start = 1;												// Needs to be 1 (erroneous for Brute and Divide at 0)
+	int steps = 1;												// Default number of array sizes to skip when incrementing
 
     /* Check for input arguement for maximum size of array input length */
     if (argc < 2) {
@@ -123,14 +110,14 @@ int main(int argc, char* argv[]){
     }
 
     /* convert input argument to integer */
-    istringstream ss(argv[1]);
-    if (!(ss >> max_num)){
+    istringstream ss(argv[1]);									// stream the second optional integer
+    if (!(ss >> max_num)){										// check
         cerr << "Invalid number of iterations" << argv[1] << '\n';
         return 1;
     }
 
 	/* optional stepping of iterations */
-	if (argc > 2) {
+	if (argc > 2) {												// optional arguement
 		istringstream ss_steps(argv[2]);
 		if ((!(ss_steps >> steps))||(steps < 1)||(steps > max_num)){
 			cerr << "Invalid number of steps " << argv[2] << '\n';
@@ -151,7 +138,7 @@ int main(int argc, char* argv[]){
     /* Generate the increasing lengths of arrays with random numbers */
 	signed int** num_array;
 	num_array = new int*[max_num];
-    for (int i = start; i < max_num; i+=steps){
+    for (int i = start; i <= max_num; i+=steps){
         num_array[i]= new signed int[i+1];
         for (int j = 0; j < (i+1) ; j++){
             num_array[i][j]=rand_int();
@@ -166,7 +153,7 @@ int main(int argc, char* argv[]){
 	outputFile << setw(width) << left << "Kadane's Algorithm";
 	outputFile << endl;
 
-	for (int i = start; i < max_num; i+=steps){
+	for (int i = start; i <= max_num; i+=steps){
 
 		int length = i;
 
@@ -192,8 +179,6 @@ int main(int argc, char* argv[]){
 		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_kadane.count();
 		outputFile << endl;
 
-		//printArray(num_array[i],length);
-
 		// Confirm Algorithms are correct:
 		if ((sum_brute!=sum_divide)||(sum_brute!=sum_kadane)||(sum_divide!=sum_kadane)){
 			cerr << "Warning : Algorithms have different maximum subarray sums for length " << i << endl;
@@ -218,13 +203,9 @@ int main(int argc, char* argv[]){
 
 	outputFile.close();
 
-
 	/* Profiling */
 	cout << "Executable Runtime: " << double( clock() - startTime) / (double) CLOCKS_PER_SEC << " seconds." << endl;
 	cout << "Processing complete.";
 
 	return 0;
 }
-/** ================================================================================================================== */
-
-

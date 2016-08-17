@@ -64,3 +64,5 @@ tmp/**/*
 *.out
 *.app
 
+
+main_mem_error.cpp
