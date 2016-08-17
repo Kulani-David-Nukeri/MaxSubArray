@@ -52,25 +52,25 @@ int brute(const int* a, const int length){						// Provide pointer to array, len
 
 // Divide and conquer: Recursive algorthm to split, compare left/right/overlap
 int divide(const int* a, const int start, const int end){
-	if (start > end ) return 0;
-	if (start==end) return max(0,a[start]);
 
+	if (start > end) return 0;
+	if (start==end) return max(0,a[start]);
 	int middle = (start + end) / 2;
 
-	/* Find the max on the left */
-	int sum = 0;
-	int max_left = 0;
-	for (int i = middle; i >= start; i--){
-		sum += a[i];
-		if (max_left < sum) max_left = sum;
-	}
-
 	/* Find the max on the right */
-	sum = 0;
+	int sum = 0;
 	int max_right = 0;
 	for (int i = (middle + 1); i <= end; i++){
 		sum += a[i];
 		if (max_right < sum) max_right = sum;
+	}
+
+	/* Find the max on the left */
+	sum = 0;
+	int max_left = 0;
+	for (int i = middle; i >= start; i--){
+		sum += a[i];
+		if (max_left < sum) max_left = sum;
 	}
 	int max_intersection = max_left + max_right;
 
@@ -112,9 +112,6 @@ int divide(const int* a, const int start, const int end){
 int main(int argc, char* argv[]){
 	/* Profiling */ clock_t startTime = clock();
 	int sum_brute = 0, sum_divide = 0 , sum_kadane = 0;
-	int max_num;
-	int start = 1;
-	int steps = 1;
 
     /* Check for input arguement for maximum size of array input length */
     if (argc < 2) {
@@ -124,12 +121,14 @@ int main(int argc, char* argv[]){
 
     /* convert input argument to integer */
     istringstream ss(argv[1]);
+    int max_num;
     if (!(ss >> max_num)){
         cerr << "Invalid number of iterations" << argv[1] << '\n';
         return 1;
     }
 
 	/* optional stepping of iterations */
+	int steps = 1;
 	if (argc > 2) {
 		istringstream ss_steps(argv[2]);
 		if ((!(ss_steps >> steps))||(steps < 1)||(steps > max_num)){
@@ -149,10 +148,12 @@ int main(int argc, char* argv[]){
     srand (static_cast<unsigned int>(time(NULL)));
 
     /* Generate the increasing lengths of arrays with random numbers */
-	signed int** num_array;
-	num_array = new int*[max_num];
+    int** num_array;
+    num_array = new int*[max_num];
+	int start = 1;
+
     for (int i = start; i < max_num; i+=steps){
-        num_array[i]= new signed int[i+1];
+        num_array[i]= new int[i+1];
         for (int j = 0; j < (i+1) ; j++){
             num_array[i][j]=rand_int();
         }
@@ -174,16 +175,21 @@ int main(int argc, char* argv[]){
 		sum_brute = brute(num_array[i],length);
 		auto time_brute_end = chrono::high_resolution_clock::now();
 		auto time_brute = chrono::duration_cast<chrono::microseconds>(time_brute_end - time_brute_start); // INT version
+		//auto time_brute = chrono::duration<double>(time_brute_end - time_brute_start); // FLOAT version
+
+		printArray(num_array[i],length);
 
 		auto time_divide_start = chrono::high_resolution_clock::now();
 		sum_divide = divide(num_array[i],0,length-start);
 		auto time_divide_end = chrono::high_resolution_clock::now();
 		auto time_divide = chrono::duration_cast<chrono::microseconds>(time_divide_end - time_divide_start); // INT version
+		//auto time_divide = chrono::duration<double>(time_divide_end - time_divide_start); // FLOAT version
 
 		auto time_kadane_start = chrono::high_resolution_clock::now();
 		sum_kadane = kadane(num_array[i],length);
 		auto time_kadane_end = chrono::high_resolution_clock::now();
 		auto time_kadane = chrono::duration_cast<chrono::microseconds>(time_kadane_end - time_kadane_start); // INT version
+		//auto time_kadane = chrono::duration<double>(time_kadane_end - time_kadane_start); // FLOAT version
 
 		/* Output Time */
 		outputFile << setw(width) << left << length;
@@ -192,8 +198,6 @@ int main(int argc, char* argv[]){
 		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_kadane.count();
 		outputFile << endl;
 
-		//printArray(num_array[i],length);
-
 		// Confirm Algorithms are correct:
 		if ((sum_brute!=sum_divide)||(sum_brute!=sum_kadane)||(sum_divide!=sum_kadane)){
 			cerr << "Warning : Algorithms have different maximum subarray sums for length " << i << endl;
@@ -201,21 +205,19 @@ int main(int argc, char* argv[]){
 			cout << "Brute Force gives " << sum_brute << endl;
 			cout << "Divide & Conquer gives " << sum_divide << endl;
 			cout << "Kadane's Algorithm gives " << sum_kadane << endl;
-
-			outputFile.close();
-
+			delete[] num_array;
 			return 1;
 
 		}
+
+		delete[] num_array;
 	}
 
 	/* Cleanup */
-	/*
-    for (int i = 0; i < max_num; i+=steps){
-        delete[] num_array[i];
-    }
-    delete[] num_array; */
-
+    //for (int i = 0; i < max_num; i+=steps){
+    //    delete[] num_array[i];
+    //}
+    //delete[] num_array;
 	outputFile.close();
 
 
