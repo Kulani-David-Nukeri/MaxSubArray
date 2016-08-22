@@ -21,20 +21,6 @@ using namespace std;
 //		Functions
 //////////////////////////
 
-signed int rand_int(){
-	return (rand() % 101) - 50 ;								// range -50 to 50
-}
-
-// Helper Function
-void printArray(const int* a, const int length){
-	cout << "{ ";
-	for (int i = 0; i < length; i++) {
-		cout << a[i] << " ";
-	}
-	cout << " }" << endl;
-
-}
-
 // Brute Force Approach
 int brute(const int* a, const int length){						// Provide pointer to array, length len
 	int maximum = a[0];											// first max is first element
@@ -54,7 +40,6 @@ int divide(const int* a, const int start, const int end){
 	if (start > end ) return 0;									// index error check
 	if (start==end) return max(0,a[start]);						// if there is one element, return it (or the zeroth element)
 	int middle = (start + end) / 2;								// find midpoint
-
 	/* Find the max on the left */
 	int sum = 0;
 	int max_left = 0;
@@ -62,7 +47,6 @@ int divide(const int* a, const int start, const int end){
 		sum += a[i];
 		if (max_left < sum) max_left = sum;
 	}
-
 	/* Find the max on the right */
 	sum = 0;
 	int max_right = 0;
@@ -71,11 +55,9 @@ int divide(const int* a, const int start, const int end){
 		if (max_right < sum) max_right = sum;
 	}
 	int max_intersection = max_left + max_right;				// if both sides are positive, then the whole subarray = current max
-
 	/* Recursion to continue to split up */
 	int max_A = divide(a, start, middle);						// continue to sub divide recursively
 	int max_B = divide(a, (middle+1), end);						//
-
 	return max(max(max_intersection, max_A), max_B);			// final return of max value
 }
 
@@ -90,6 +72,18 @@ int divide(const int* a, const int start, const int end){
 	return maximum;
 }
 
+// Helper Functions
+
+signed int rand_int(){ return (rand() % 101) - 50; }			// range -50 to 50
+
+void printArray(const int* a, const int length){
+	cout << "{ ";
+	for (int i = 0; i < length; i++) {
+		cout << setw(3) << a[i] << " ";
+	}
+	cout << " }" << endl;
+}
+
 /** ======================================================================================= **/
 
 ////////////////////////////
@@ -98,6 +92,7 @@ int divide(const int* a, const int start, const int end){
 
 int main(int argc, char* argv[]){
 	/* Profiling */ clock_t startTime = clock();				// overall system time elapsed, not very precise
+
 	int sum_brute = 0, sum_divide = 0 , sum_kadane = 0;
 	int max_num;
 	int start = 1;												// Needs to be 1 (erroneous for Brute and Divide at 0)
@@ -128,22 +123,10 @@ int main(int argc, char* argv[]){
 	/* Output setup */
 	string fileOutName = "output.txt";
 	ofstream outputFile(fileOutName, ios::out | ios::trunc);
-
 	if (!outputFile.is_open()) { cerr << "Unable to open file:" << fileOutName << endl; return -1;}
-
 
     /* Initialize random seed */
     srand (static_cast<unsigned int>(time(NULL)));
-
-    /* Generate the increasing lengths of arrays with random numbers */
-	signed int** num_array;
-	num_array = new int*[max_num];
-    for (int i = start; i <= max_num; i+=steps){
-        num_array[i]= new signed int[i+1];
-        for (int j = 0; j < (i+1) ; j++){
-            num_array[i][j]=rand_int();
-        }
-    }
 
     /* Output titles */
 	int width = 20;
@@ -157,49 +140,59 @@ int main(int argc, char* argv[]){
 
 		int length = i;
 
+		/* Generate the increasing lengths of arrays with random numbers */
+		signed int* num_array = nullptr;
+		for (int i = start; i <= max_num; i+=steps){
+			num_array = new signed int[i];
+			for (int j = 0; j < i ; j++){
+				num_array[j]=rand_int();
+			}
+		}
+
 		auto time_brute_start = chrono::high_resolution_clock::now();
-		sum_brute = brute(num_array[i],length);
+		sum_brute = brute(num_array,length);
 		auto time_brute_end = chrono::high_resolution_clock::now();
 		auto time_brute = chrono::duration_cast<chrono::microseconds>(time_brute_end - time_brute_start); // INT version
 
 		auto time_divide_start = chrono::high_resolution_clock::now();
-		sum_divide = divide(num_array[i],0,length-start);
+		sum_divide = divide(num_array,0,length-start);
 		auto time_divide_end = chrono::high_resolution_clock::now();
 		auto time_divide = chrono::duration_cast<chrono::microseconds>(time_divide_end - time_divide_start); // INT version
 
 		auto time_kadane_start = chrono::high_resolution_clock::now();
-		sum_kadane = kadane(num_array[i],length);
+		sum_kadane = kadane(num_array,length);
 		auto time_kadane_end = chrono::high_resolution_clock::now();
 		auto time_kadane = chrono::duration_cast<chrono::microseconds>(time_kadane_end - time_kadane_start); // INT version
 
 		/* Output Time */
 		outputFile << setw(width) << left << length;
-		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_brute.count();
-		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_divide.count();
-		outputFile << setw(width) << left << std::setprecision(10) << fixed << time_kadane.count();
+		outputFile << setw(width) << left << std::setprecision(7) << fixed << time_brute.count();
+		outputFile << setw(width) << left << std::setprecision(7) << fixed << time_divide.count();
+		outputFile << setw(width) << left << std::setprecision(7) << fixed << time_kadane.count();
 		outputFile << endl;
+
+		/*
+		outputFile << length << " ";
+		outputFile << time_brute.count() << " ";
+		outputFile << time_divide.count() << " ";
+		outputFile << time_kadane.count();
+		outputFile << endl;
+		 */
+
+		//printArray(num_array,length);
 
 		// Confirm Algorithms are correct:
 		if ((sum_brute!=sum_divide)||(sum_brute!=sum_kadane)||(sum_divide!=sum_kadane)){
 			cerr << "Warning : Algorithms have different maximum subarray sums for length " << i << endl;
-			printArray(num_array[i],length);
+			printArray(num_array,length);
 			cout << "Brute Force gives " << sum_brute << endl;
 			cout << "Divide & Conquer gives " << sum_divide << endl;
 			cout << "Kadane's Algorithm gives " << sum_kadane << endl;
-
 			outputFile.close();
-
 			return 1;
-
 		}
+		delete num_array;
 	}
-
-	/* Cleanup */
-	/*
-    for (int i = 0; i < max_num; i+=steps){
-        delete[] num_array[i];
-    }
-    delete[] num_array; */
 
 	outputFile.close();
 
