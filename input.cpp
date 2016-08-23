@@ -5,61 +5,61 @@
 
 using namespace std;
 
-typedef long Algorithm;
-class StringNode{
+typedef int Algorithm;
+class IntNode{
 	public:
 	    Algorithm kadane;
 	    Algorithm divCon;
 	    Algorithm brute;
 
 
-		StringNode* next;
+		IntNode* next;
 
-		friend class SLinkedList;
+		friend class IntLinkedList;
 };
 
-class SLinkedList{
+class IntLinkedList{
 	public:
-		SLinkedList();
-		~SLinkedList();
+		IntLinkedList();
+		~IntLinkedList();
 		bool isEmpty()const;
 		const int num();		//prints front element
 		void addFront(const int& a, const int& b, const int& c);
 		void removeFront();
-		friend ostream& operator<<(ostream& out, const SLinkedList& obj);
+		friend ostream& operator<<(ostream& out, const IntLinkedList& obj);
 
 	private:
-		StringNode* head;
+		IntNode* head;
 };
 
-SLinkedList::SLinkedList() :head(NULL){}
-SLinkedList::~SLinkedList(){
+IntLinkedList::IntLinkedList() :head(NULL){}
+IntLinkedList::~IntLinkedList(){
 	while(!isEmpty()) removeFront();
 }
-bool SLinkedList::isEmpty()const{
+bool IntLinkedList::isEmpty()const{
 	 return head == NULL;
 }
 /*
-const int& SLinkedList::front()const{
+const int& IntLinkedList::front()const{
 
 }
 */
-void SLinkedList::addFront(const int& a, const int& b, const int& c){
-	StringNode* v = new StringNode;
+void IntLinkedList::addFront(const int& a, const int& b, const int& c){
+	IntNode* v = new IntNode;
 	v ->brute=a;
 	v ->divCon=b;
 	v ->kadane=c;
 	v ->next=head;
 	head =v;
 }
-void SLinkedList::removeFront(){
-	StringNode* old =head;
+void IntLinkedList::removeFront(){
+	IntNode* old =head;
 	head = old->next;
 	delete old;
 }
 
-ostream& operator<<(ostream& out, const SLinkedList& obj){
-	StringNode* temp = obj.head;
+ostream& operator<<(ostream& out, const IntLinkedList& obj){
+	IntNode* temp = obj.head;
 	while(temp !=NULL){
 		out << temp->brute<<' '<<temp->divCon<<' '<<temp->kadane<<endl;
 		temp = temp->next;
@@ -68,7 +68,7 @@ ostream& operator<<(ostream& out, const SLinkedList& obj){
 }
 
 int main (void){
-	SLinkedList* data= new SLinkedList();
+	IntLinkedList* data= new IntLinkedList();
     ifstream input;
 
     input.open("output.txt");
@@ -77,7 +77,7 @@ int main (void){
         return -1;
     }
 
-    long inputSize,alg1,alg2,alg3;
+    int inputSize,alg1,alg2,alg3;
     string firstLine;
 
     getline(input,firstLine); //skips first line
