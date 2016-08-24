@@ -1,58 +1,46 @@
 //
-//  QueueLinkedList.hpp
+//  QueueLinkList.hpp
 //  MaxSubArray
 //
 //  Created by Tyson on 2016/08/24.
 //  Copyright © 2016 Tyson Cross. All rights reserved.
 //
 
-#ifndef Node
-
-class Node{
-public:
-    Node();
-    int getElem();
-    friend class QueueLinkedList;
-    ~Node();
-private:
+struct Node{
     const int kadane;
     const int divCon;
     const int brute;
     Node* next;
 };
 
-#define Node
-
-#endif /* Node */
-
-
-#ifndef QueueLinkedList
+#ifndef QueueLinkList_h
 
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
 
-class QueueLinkedList{
+class QueueLinkList{
 public:
-    QueueLinkedList();
-    ~QueueLinkedList();
+    QueueLinkList();
     bool isEmpty() const;
-    const int front();                  //return front element
-    const int rear();                   // return back element
-    //const int size();                // return number of elements
-    void enqueue(const int e);
+    const Node& front() const;                  //return front element
+    const Node& rear() const;                   // return back element
+    int size() const;                   // return number of elements
+    void enqueue(const int& a, const int& b, const int& c);
     void dequeue();
-    friend std::ostream& operator<<(std::ostream& out, const QueueLinkedList& obj);
+    friend std::ostream& operator<<(std::ostream& out, const QueueLinkList& obj);
+    ~QueueLinkList();
+
 private:
-    int Node* head;
-    int Node* tail;
-    //int size;
+    Node* head;
+    Node* tail;
+    int element_size;
 };
 
 
-#define QueueLinkedList
+#define QueueLinkList_h
 
 #include <stdio.h>
 
-#endif /* QueueLinkedList */
+#endif /* QueueLinkList_h */
