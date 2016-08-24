@@ -6,6 +6,25 @@
 //  Copyright © 2016 Tyson Cross. All rights reserved.
 //
 
+#ifndef Node
+
+class Node{
+public:
+    Node();
+    int getElem();
+    friend class QueueLinkedList;
+    ~Node();
+private:
+    const int kadane;
+    const int divCon;
+    const int brute;
+    Node* next;
+};
+
+#define Node
+
+#endif /* Node */
+
 
 #ifndef QueueLinkedList
 
@@ -13,16 +32,6 @@
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
-
-class Node{
-public:
-    Node();
-    int getElem();
-    //~Node();
-private:
-    const int elem;
-    Node* next;
-};
 
 class QueueLinkedList{
 public:
@@ -35,10 +44,9 @@ public:
     void enqueue(const int e);
     void dequeue();
     friend std::ostream& operator<<(std::ostream& out, const QueueLinkedList& obj);
-
 private:
-    Node* head;
-    Node* tail;
+    int Node* head;
+    int Node* tail;
     //int size;
 };
 
@@ -47,4 +55,4 @@ private:
 
 #include <stdio.h>
 
-#endif /* QueueLinkedList_hpp */
+#endif /* QueueLinkedList */
